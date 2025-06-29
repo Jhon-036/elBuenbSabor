@@ -22,7 +22,7 @@ const Authentication = ({ onClose }) => {
    //FUNCION DEL BTNLOGIN
    const handleLogin = (e) => {
       e.preventDefault();
- 
+
       if (!validarEmail(username)) {
          setError('Correo inválido. Debe tener un formato válido como nombre@dominio.com');
          return;
@@ -31,18 +31,31 @@ const Authentication = ({ onClose }) => {
          setError('Contraseña inválida. Debe tener mínimo 6 caracteres, incluyendo letras y números.');
          return;
       }
- 
-      const esAdmin = username === 'admin@gmail.com'; // puedes personalizar este correo
- 
+
+      //OBTENERMOS LOCALSTORAGE
+      const credenciales = JSON.parse(localStorage.getItem('credenciales')) || []
+
+      const esAdmin = username === 'admin@gmail.com';
+
       const user = {
          name: username,
          rol: esAdmin ? 'admin' : 'cliente'
       };
- 
-      localStorage.setItem('user', JSON.stringify(user));
-      window.dispatchEvent(new Event('userLoggedIn'));
-      onClose();
-      window.location.href = '/';
+
+      const usuarioEncontrado = esAdmin
+         ? true // permitir login directo
+         : credenciales.find(user => user.username === username && user.password === password);
+
+      if (usuarioEncontrado) {
+         localStorage.setItem('user', JSON.stringify(user));
+         window.dispatchEvent(new Event('userLoggedIn'));
+         onClose();
+         window.location.href = '/';
+      } else {
+         setError('Usuario o contraseña incorrectos')
+         return
+      }
+
    };
 
    //FUNCION DEL BTNREGISTRER
@@ -55,7 +68,7 @@ const Authentication = ({ onClose }) => {
 
       //OBJETO PARA GUARDAR LOS DATOS Y ENVIARLO AL LOCALSTORAGE
       const formCredenciales = { username, password }
-      
+
       //MSG DE ERROR VALIDACIONES
       if (!validarEmail(username)) {
          setError('Correo inválido. Debe tener un formato válido como nombre@dominio.com');
@@ -118,7 +131,7 @@ const Authentication = ({ onClose }) => {
                         onChange={(e) => setPassword(e.target.value)}
                      />
 
-                     {error && <p style={{ color: 'red', marginBottom: '10px', fontSize:'14px' }}>{error}</p>}
+                     {error && <p style={{ color: 'red', marginBottom: '10px', fontSize: '14px' }}>{error}</p>}
 
                   </section>
                   <section style={{ padding: '16px 0', display: 'flex', justifyContent: 'flex-end' }}>
@@ -169,7 +182,7 @@ const Authentication = ({ onClose }) => {
                         onChange={(e) => setPassword2(e.target.value)}
                      />
 
-                     {error && <p style={{ color: 'red', marginBottom: '10px', fontSize:'14px' }}>{error}</p>}
+                     {error && <p style={{ color: 'red', marginBottom: '10px', fontSize: '14px' }}>{error}</p>}
 
                   </section>
                   <section style={{ padding: '16px 0', display: 'flex', alignItems: 'center' }}>
