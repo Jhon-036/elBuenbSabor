@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=National+Park:wght@200..800&display=swap');
+/* App.css */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "National Park", sans-serif;
+}
+
+html {
+   background-color: #111827;
+}
+
+html, body {
+  width: 100%;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: url('./assets/background.jpg') no-repeat center center fixed;
+  background-size: cover;
+  color: rgb(153, 152, 240);
+}
